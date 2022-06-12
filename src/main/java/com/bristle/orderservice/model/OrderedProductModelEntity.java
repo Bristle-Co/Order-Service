@@ -6,6 +6,8 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 
+// This table has many to one relationship with the orders table
+// One order could have many models(規格)
 @Entity(name = "ordered_product_models")
 public class OrderedProductModelEntity {
 

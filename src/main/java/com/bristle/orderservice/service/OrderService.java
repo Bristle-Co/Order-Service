@@ -1,11 +1,16 @@
 package com.bristle.orderservice.service;
 
 
+import com.bristle.orderservice.controller.OrderController;
 import com.bristle.orderservice.model.OrderEntity;
 import com.bristle.orderservice.repository.OrderRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.sql.SQLException;
 import java.util.List;
@@ -14,6 +19,7 @@ import java.util.List;
 public class OrderService {
 
     private final OrderRepository m_orderRepository;
+    Logger LOG = LoggerFactory.getLogger(OrderService.class);
 
     @Autowired
     public OrderService(OrderRepository m_orderRepository) {
@@ -21,12 +27,20 @@ public class OrderService {
     }
 
     @Transactional
-    public void addOrder(OrderEntity orderEntity) throws SQLException {
+    public void addOrder(OrderEntity orderEntity) throws Exception {
         m_orderRepository.save(orderEntity);
+
     }
 
     @Transactional(readOnly = true)
-    public List<OrderEntity> getOrdersByLimitAndOffset(int limit, int offset) throws SQLException {
+    public List<OrderEntity> getOrdersByLimitAndOffset(int limit, int offset) throws Exception {
+        // Note that the orders are put into descending order first
+        // and then offset is applied
+
+        // LIMIT 0 simply returns an empty list, absolutely useless
+        // thus we make default limit 20
+        // 20 is about the max number of orders that mom will be tracking at once
+        limit = limit <= 0 ? 20 : limit;
         return m_orderRepository.getOrdersByLimitAndOffset(limit, offset);
     }
 }
