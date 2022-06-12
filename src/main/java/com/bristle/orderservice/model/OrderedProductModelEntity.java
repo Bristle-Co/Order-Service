@@ -17,7 +17,7 @@ public class OrderedProductModelEntity {
     // Column names, reusable from outside of class
     // COLM for column
     public static final String COLM_MODEL_ID = "model_id";
-    public static final String COLM_NUM_OF_ITEMS = "num_of_items";
+    public static final String COLM_QUANTITY = "quantity";
     public static final String COLM_PRICE= "price";
     public static final String COLM_MODEL = "model";
     public static final String COLM_ORDER_ID = "order_id";
@@ -27,7 +27,7 @@ public class OrderedProductModelEntity {
     @Column(name = COLM_MODEL_ID)
     int modelID;
 
-    @Column(name = COLM_NUM_OF_ITEMS)
+    @Column(name = COLM_QUANTITY)
     int numOfItems;
 
     @Column(name = COLM_PRICE)
