@@ -30,35 +30,38 @@ public class OrderEntity {
     public static final String COLM_NOTE = "note";
     public static final String COLM_FINISHED_ISSUING_TICKETS_AT= "finished_issuing_tickets_at";
 
+    public static final String COLM_PRODUCT_= "finished_issuing_tickets_at";
+
     // This is simply a auto incrementing integer
     // When displaying we concatenate it with the prefix "BR"
     // ex: BR1, BR5, BR888
     @Id
     @GeneratedValue(strategy= GenerationType.AUTO)
     @Column(name = COLM_ORDER_ID)
-    int orderID;
+    private int orderID;
 
     // There is a unique order Id we get from customer in a order
     // however the format of this string is different from customer to customer
     // thus we can not use it as primary key
     @Column(name = COLM_CUSTOMER_ORDER_ID, nullable = true)
-    String customerOderId;
+    private String customerOderId;
 
     // Foreign key to customers table
     @Column(name = COLM_CUSTOMER_ID, nullable = true)
-    String customerId;
+    private String customerId;
 
     // This is the initial estimated due date
     @Column(name = COLM_DUE_DATE, nullable = true)
-    Date dueDate;
+    private Date dueDate;
 
     @Column(name = COLM_NOTE, nullable = true)
-    String note;
+    private String note;
 
     // If this field is null that means not all the production tickets
     // under this order has been assigned
     // we then can
     @Column(name = COLM_FINISHED_ISSUING_TICKETS_AT, nullable = true)
+    @Temporal(TemporalType.TIMESTAMP)
     LocalDateTime finishedIssuingTicketsAt;
 
     public OrderEntity() {
