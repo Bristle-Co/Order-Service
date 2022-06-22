@@ -1,18 +1,14 @@
 package com.bristle.orderservice.service;
 
 
-import com.bristle.orderservice.controller.OrderController;
 import com.bristle.orderservice.model.OrderEntity;
 import com.bristle.orderservice.repository.OrderRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.RequestMapping;
 
-import java.sql.SQLException;
 import java.util.List;
 
 @Service

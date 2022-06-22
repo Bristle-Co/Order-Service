@@ -9,7 +9,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface OrderRepository extends JpaRepository<OrderEntity, Long> {
+public interface OrderRepository extends JpaRepository<OrderEntity, Integer> {
     @Query(value = "SELECT * FROM " + OrderEntity.TABLE_NAME +
             " ORDER BY " + OrderEntity.COLM_ORDER_ID +
             " DESC LIMIT ?1 OFFSET ?2 ;" , nativeQuery = true)

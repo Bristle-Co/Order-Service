@@ -1,12 +1,9 @@
 package com.bristle.orderservice.model;
 
-import org.springframework.context.annotation.Primary;
-import org.springframework.lang.NonNull;
-
-import javax.annotation.processing.Generated;
 import javax.persistence.*;
 import java.time.LocalDateTime;
-import java.sql.Date;
+import java.util.Date;
+import java.util.List;
 
 // This class is used for database definition in relational database
 // The protobuf generated class "Customer" shoud map to this class
@@ -28,9 +25,6 @@ public class OrderEntity {
     public static final String COLM_CUSTOMER_ID= "customer_id";
     public static final String COLM_DUE_DATE = "due_date";
     public static final String COLM_NOTE = "note";
-    public static final String COLM_FINISHED_ISSUING_TICKETS_AT= "finished_issuing_tickets_at";
-
-    public static final String COLM_PRODUCT_= "finished_issuing_tickets_at";
 
     // This is simply a auto incrementing integer
     // When displaying we concatenate it with the prefix "BR"
@@ -52,17 +46,14 @@ public class OrderEntity {
 
     // This is the initial estimated due date
     @Column(name = COLM_DUE_DATE, nullable = true)
+    @Temporal(TemporalType.DATE)
     private Date dueDate;
 
     @Column(name = COLM_NOTE, nullable = true)
     private String note;
 
-    // If this field is null that means not all the production tickets
-    // under this order has been assigned
-    // we then can
-    @Column(name = COLM_FINISHED_ISSUING_TICKETS_AT, nullable = true)
-    @Temporal(TemporalType.TIMESTAMP)
-    LocalDateTime finishedIssuingTicketsAt;
+    @OneToMany(fetch = FetchType.EAGER)
+    private List<ProductEntryEntity> productEntries;
 
     public OrderEntity() {
     }
@@ -75,57 +66,11 @@ public class OrderEntity {
         this.customerId = customerId;
         this.dueDate = dueDate;
         this.note = note;
-        this.finishedIssuingTicketsAt = finishedIssuingTicketsAt;
     }
 
     // Lombok could work well here but I don't wanna use it lol
     // It doesn't support new version of intellij
-    public int getOrderID() {
-        return orderID;
-    }
 
-    public void setOrderID(int orderID) {
-        this.orderID = orderID;
-    }
 
-    public String getCustomerOderId() {
-        return customerOderId;
-    }
-
-    public void setCustomerOderId(String customerOderId) {
-        this.customerOderId = customerOderId;
-    }
-
-    public String getCustomerId() {
-        return customerId;
-    }
-
-    public void setCustomerId(String customerId) {
-        this.customerId = customerId;
-    }
-
-    public Date getDueDate() {
-        return dueDate;
-    }
-
-    public void setDueDate(Date dueDate) {
-        this.dueDate = dueDate;
-    }
-
-    public String getNote() {
-        return note;
-    }
-
-    public void setNote(String note) {
-        this.note = note;
-    }
-
-    public LocalDateTime getFinishedIssuingTicketsAt() {
-        return finishedIssuingTicketsAt;
-    }
-
-    public void setFinishedIssuingTicketsAt(LocalDateTime finishedIssuingTicketsAt) {
-        this.finishedIssuingTicketsAt = finishedIssuingTicketsAt;
-    }
 }
 
