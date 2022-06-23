@@ -15,7 +15,11 @@ import static com.bristle.orderservice.model.OrderEntity.COLM_ORDER_ID;
 
 // This table has many-to-one relationship with the orders table
 // One order could have many product entries(規格)
+
+// Note that @IdClass is used instead of @EmbeddedId because hibernate @EmbeddedId
+// doesn't play well with a column being foreign key and primary key at the same time
 @Entity(name = "product_entries")
+@IdClass(ProductEntryPK.class)
 public class ProductEntryEntity {
 
     public static final String TABLE_NAME = "product_entries";
@@ -25,44 +29,70 @@ public class ProductEntryEntity {
     public static final String COLM_MODEL = "model";
     public static final String COLM_PRODUCT_TICKET_ID= "product_ticket_id";
 
-    @EmbeddedId
-    private ProductEntryPK productEntryPK;
+    public static final String COLM_ORDER_ID_FK= "order_id_fk";
 
-    @Column(name = COLM_QUANTITY)
-    private int quantity;
 
-    @Column(name = COLM_PRICE)
-    private int price;
+    @Id
+    @Column(name = COLM_MODEL, nullable = false)
+    private String model;
+
+    @Column(name = COLM_QUANTITY, nullable = true)
+    private Integer quantity;
+
+    @Column(name = COLM_PRICE, nullable = true)
+    private Integer price;
 
     // If this field is null that means this product entry
     // has not been made into a product ticket
     @Column(name = COLM_PRODUCT_TICKET_ID, nullable = true)
     private String productTicket_id;
 
+    // foreign key
+    @Id
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = COLM_ORDER_ID_FK, referencedColumnName = OrderEntity.COLM_ORDER_ID)
+    private OrderEntity order;
+
     public ProductEntryEntity() {
     }
 
-    public ProductEntryPK getProductEntryPK() {
-        return productEntryPK;
+    public ProductEntryEntity(String model, Integer quantity, Integer price, String productTicket_id, OrderEntity order) {
+        this.model = model;
+        this.quantity = quantity;
+        this.price = price;
+        this.productTicket_id = productTicket_id;
+        this.order = order;
     }
 
-    public void setProductEntryPK(ProductEntryPK productEntryPK) {
-        this.productEntryPK = productEntryPK;
+    public String getModel() {
+        return model;
     }
 
-    public int getQuantity() {
+    public void setModel(String model) {
+        this.model = model;
+    }
+
+    public OrderEntity getOrder() {
+        return order;
+    }
+
+    public void setOrder(OrderEntity order) {
+        this.order = order;
+    }
+
+    public Integer getQuantity() {
         return quantity;
     }
 
-    public void setQuantity(int quantity) {
+    public void setQuantity(Integer quantity) {
         this.quantity = quantity;
     }
 
-    public int getPrice() {
+    public Integer getPrice() {
         return price;
     }
 
-    public void setPrice(int price) {
+    public void setPrice(Integer price) {
         this.price = price;
     }
 

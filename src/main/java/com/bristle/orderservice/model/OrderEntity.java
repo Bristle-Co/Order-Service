@@ -26,13 +26,15 @@ public class OrderEntity {
     public static final String COLM_DUE_DATE = "due_date";
     public static final String COLM_NOTE = "note";
 
+    public static final String COLM_DELIVERED_AT = "delivered_at";
+
     // This is simply a auto incrementing integer
     // When displaying we concatenate it with the prefix "BR"
     // ex: BR1, BR5, BR888
     @Id
-    @GeneratedValue(strategy= GenerationType.AUTO)
+    @GeneratedValue(strategy= GenerationType.IDENTITY)
     @Column(name = COLM_ORDER_ID)
-    private int orderID;
+    private Integer orderID;
 
     // There is a unique order Id we get from customer in a order
     // however the format of this string is different from customer to customer
@@ -45,6 +47,8 @@ public class OrderEntity {
     private String customerId;
 
     // This is the initial estimated due date
+    // I use java.util.Date + @Temporal
+    // because I want to use the constructor that takes epoch long
     @Column(name = COLM_DUE_DATE, nullable = true)
     @Temporal(TemporalType.DATE)
     private Date dueDate;
@@ -52,25 +56,92 @@ public class OrderEntity {
     @Column(name = COLM_NOTE, nullable = true)
     private String note;
 
-    @OneToMany(fetch = FetchType.EAGER)
+    @Column(name = COLM_DELIVERED_AT, nullable = true)
+    private LocalDateTime deliveredAt;
+
+    // The name of this mappedBy attribute is the name of the variable
+    // that is annotated with @JoinColumn on the owning side
+    // this is the referencing side
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "order")
     private List<ProductEntryEntity> productEntries;
 
     public OrderEntity() {
     }
 
-    // This constructor is used for initial initialization of a order
-    // order_id is auto increment so no need to pass it in
-    // also a order ticket will not have production tickets assigned so no timestamp added
-    public OrderEntity(String customerOderId, String customerId, Date dueDate, String note, LocalDateTime finishedIssuingTicketsAt) {
+    public OrderEntity(Integer orderID,
+                       String customerOderId,
+                       String customerId,
+                       Date dueDate,
+                       String note,
+                       LocalDateTime deliveredAt,
+                       List<ProductEntryEntity> productEntries) {
+        this.orderID = orderID;
         this.customerOderId = customerOderId;
         this.customerId = customerId;
         this.dueDate = dueDate;
         this.note = note;
+        this.deliveredAt = deliveredAt;
+        this.productEntries = productEntries;
     }
+
 
     // Lombok could work well here but I don't wanna use it lol
     // It doesn't support new version of intellij
 
+    public Integer getOrderID() {
+        return orderID;
+    }
 
+    public void setOrderID(Integer orderID) {
+        this.orderID = orderID;
+    }
+
+    public String getCustomerOderId() {
+        return customerOderId;
+    }
+
+    public void setCustomerOderId(String customerOderId) {
+        this.customerOderId = customerOderId;
+    }
+
+    public String getCustomerId() {
+        return customerId;
+    }
+
+    public void setCustomerId(String customerId) {
+        this.customerId = customerId;
+    }
+
+    public Date getDueDate() {
+        return dueDate;
+    }
+
+    public void setDueDate(Date dueDate) {
+        this.dueDate = dueDate;
+    }
+
+    public String getNote() {
+        return note;
+    }
+
+    public void setNote(String note) {
+        this.note = note;
+    }
+
+    public LocalDateTime getDeliveredAt() {
+        return deliveredAt;
+    }
+
+    public void setDeliveredAt(LocalDateTime deliveredAt) {
+        this.deliveredAt = deliveredAt;
+    }
+
+    public List<ProductEntryEntity> getProductEntries() {
+        return productEntries;
+    }
+
+    public void setProductEntries(List<ProductEntryEntity> productEntries) {
+        this.productEntries = productEntries;
+    }
 }
 

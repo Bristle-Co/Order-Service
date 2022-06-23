@@ -15,7 +15,7 @@ import java.util.List;
 public class OrderService {
 
     private final OrderRepository m_orderRepository;
-    Logger LOG = LoggerFactory.getLogger(OrderService.class);
+    Logger log = LoggerFactory.getLogger(OrderService.class);
 
     @Autowired
     public OrderService(OrderRepository m_orderRepository) {
@@ -23,9 +23,8 @@ public class OrderService {
     }
 
     @Transactional
-    public void addOrder(OrderEntity orderEntity) throws Exception {
+    public void upsertOrder(OrderEntity orderEntity) throws Exception {
         m_orderRepository.save(orderEntity);
-
     }
 
     @Transactional(readOnly = true)
