@@ -1,18 +1,7 @@
 package com.bristle.orderservice.model;
 
-import javax.persistence.Column;
-import javax.persistence.Embeddable;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-import javax.persistence.FetchType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import java.io.Serializable;
 import java.util.Objects;
-
-import static com.bristle.orderservice.model.OrderEntity.COLM_ORDER_ID;
-import static com.bristle.orderservice.model.ProductEntryEntity.COLM_MODEL;
 
 public class ProductEntryPK implements Serializable {
 

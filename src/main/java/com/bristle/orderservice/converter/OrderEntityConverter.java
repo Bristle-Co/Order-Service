@@ -19,7 +19,7 @@ public class OrderEntityConverter {
         m_productEntryConverter = productEntryConverter;
     }
 
-    public OrderEntity protoToEntity(Order orderProto){
+    public OrderEntity protoToEntity(Order orderProto) {
         Integer orderId = orderProto.getOrderId();
         String customerOrderId = orderProto.getCustomerOrderId();
         String customerId = orderProto.getCustomerId();
@@ -29,31 +29,31 @@ public class OrderEntityConverter {
 
         return new OrderEntity(
                 orderId,
-                customerOrderId.equals("")?null:customerOrderId,
-                customerId.equals("")?null:customerId,
-                dueDate == Long.MIN_VALUE ? null: new Date(dueDate),
-                note.equals("")? null:note,
-                deliveredAt == Long.MIN_VALUE ? null: LocalDateTime.ofEpochSecond(deliveredAt, 0, ZoneOffset.UTC),
+                customerOrderId.equals("") ? null : customerOrderId,
+                customerId.equals("") ? null : customerId,
+                dueDate == Long.MIN_VALUE ? null : new Date(dueDate),
+                note.equals("") ? null : note,
+                deliveredAt == Long.MIN_VALUE ? null : LocalDateTime.ofEpochSecond(deliveredAt, 0, ZoneOffset.UTC),
                 orderProto.getProductEntryList().stream().map(m_productEntryConverter::protoToEntity).collect(Collectors.toList())
-                );
+        );
     }
 
-    public Order entityToProto(OrderEntity orderEntity){
+    public Order entityToProto(OrderEntity orderEntity) {
         Integer orderId = orderEntity.getOrderID();
         String customerOrderId = orderEntity.getCustomerOderId();
         String customerId = orderEntity.getCustomerId();
         Date dueDate = orderEntity.getDueDate();
         String note = orderEntity.getNote();
         LocalDateTime deliveredAt = orderEntity.getDeliveredAt();
-        List<ProductEntryEntity> productEntriesList= orderEntity.getProductEntries();
+        List<ProductEntryEntity> productEntriesList = orderEntity.getProductEntries();
 
         return Order.newBuilder()
-                .setOrderId(orderId)
+                .setOrderId(orderId == null ? Integer.MIN_VALUE : orderId)
                 .setCustomerOrderId(customerOrderId == null ? "" : customerOrderId)
                 .setCustomerId(customerId == null ? "" : customerId)
-                .setDueDate(dueDate == null? Long.MIN_VALUE : dueDate.getTime())
-                .setNote(note == null?"":note)
-                .setDeliveredAt(deliveredAt == null?Long.MIN_VALUE : deliveredAt.toEpochSecond(ZoneOffset.UTC))
+                .setDueDate(dueDate == null ? Long.MIN_VALUE : dueDate.getTime())
+                .setNote(note == null ? "" : note)
+                .setDeliveredAt(deliveredAt == null ? Long.MIN_VALUE : deliveredAt.toEpochSecond(ZoneOffset.UTC))
                 .addAllProductEntry(productEntriesList.stream().map(m_productEntryConverter::entityToProto).collect(Collectors.toList()))
                 .build();
     }

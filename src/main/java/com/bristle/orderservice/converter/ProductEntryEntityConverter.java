@@ -1,8 +1,6 @@
 package com.bristle.orderservice.converter;
 
-import com.bristle.orderservice.model.OrderEntity;
 import com.bristle.orderservice.model.ProductEntryEntity;
-import com.bristle.proto.order.Order;
 import com.bristle.proto.order.ProductEntry;
 import org.springframework.stereotype.Component;
 

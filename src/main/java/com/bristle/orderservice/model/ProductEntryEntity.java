@@ -1,17 +1,12 @@
 package com.bristle.orderservice.model;
 
-import org.springframework.lang.NonNull;
-
 import javax.persistence.Column;
-import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.IdClass;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-
-import static com.bristle.orderservice.model.OrderEntity.COLM_ORDER_ID;
 
 // This table has many-to-one relationship with the orders table
 // One order could have many product entries(規格)
@@ -102,5 +97,16 @@ public class ProductEntryEntity {
 
     public void setProductTicket_id(String productTicket_id) {
         this.productTicket_id = productTicket_id;
+    }
+
+    @Override
+    public String toString() {
+        return "ProductEntryEntity{" +
+                "model='" + model + '\'' +
+                ", quantity=" + quantity +
+                ", price=" + price +
+                ", productTicket_id='" + productTicket_id + '\'' +
+                ", order=" + order +
+                '}';
     }
 }

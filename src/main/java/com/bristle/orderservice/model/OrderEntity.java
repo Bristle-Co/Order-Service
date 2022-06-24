@@ -1,6 +1,14 @@
 package com.bristle.orderservice.model;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.OneToMany;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
@@ -143,5 +151,19 @@ public class OrderEntity {
     public void setProductEntries(List<ProductEntryEntity> productEntries) {
         this.productEntries = productEntries;
     }
+
+    @Override
+    public String toString() {
+        return "OrderEntity{" +
+                "orderID=" + orderID +
+                ", customerOderId='" + customerOderId + '\'' +
+                ", customerId='" + customerId + '\'' +
+                ", dueDate=" + dueDate +
+                ", note='" + note + '\'' +
+                ", deliveredAt=" + deliveredAt +
+                ", productEntries=" + productEntries +
+                '}';
+    }
 }
+
 
