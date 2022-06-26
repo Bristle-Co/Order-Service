@@ -15,6 +15,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
+import java.util.UUID;
 
 @Service
 public class OrderService {
@@ -38,16 +40,10 @@ public class OrderService {
 
     @Transactional
     public Order upsertOrder(Order orderProto) throws Exception {
-        OrderEntity i = m_orderConverter.protoToEntity(orderProto);
-        log.info("print: "+i.toString());
-        // id column is generated, make sure it is null when inserted
-        // else hiberante does a select statement first and our one to many relationship
-        // screws it up
-        i.setOrderID(null);
-        OrderEntity orderEntity = new OrderEntity(null, null, null, null, null, null, null);
-        ProductEntryEntity productEntryEntity = new ProductEntryEntity("model",null, null, null, i);
-        i.setProductEntries(Arrays.asList(productEntryEntity));
-        m_orderRepository.save(i);
+        OrderEntity orderEntity = m_orderConverter.protoToEntity(orderProto);
+        m_orderRepository.save(orderEntity);
+        List<ProductEntryEntity> toBeUpserted = orderEntity.getProductEntries();
+        m_productEntryRepository.saveAll(toBeUpserted);
         return orderProto;
     }
 

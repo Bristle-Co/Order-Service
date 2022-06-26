@@ -1,5 +1,9 @@
 package com.bristle.orderservice.model;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import org.hibernate.annotations.NotFound;
+import org.hibernate.annotations.NotFoundAction;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -59,6 +63,7 @@ public class OrderEntity {
     // because I want to use the constructor that takes epoch long
     @Column(name = COLM_DUE_DATE, nullable = true)
     @Temporal(TemporalType.DATE)
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     private Date dueDate;
 
     @Column(name = COLM_NOTE, nullable = true)
@@ -71,6 +76,7 @@ public class OrderEntity {
     // that is annotated with @JoinColumn on the owning side
     // this is the referencing side
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "order")
+    @NotFound(action = NotFoundAction.IGNORE)
     private List<ProductEntryEntity> productEntries;
 
     public OrderEntity() {
