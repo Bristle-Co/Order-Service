@@ -13,4 +13,6 @@ public interface OrderRepository extends JpaRepository<OrderEntity, Integer> {
             " ORDER BY " + OrderEntity.COLM_ORDER_ID +
             " DESC LIMIT ?1 OFFSET ?2 ;" , nativeQuery = true)
     List<OrderEntity> getOrdersByLimitAndOffset(int limit, int offset);
+
+    //List<OrderEntity> getOrderEntitiesByColmCustomerIdAnd
 }

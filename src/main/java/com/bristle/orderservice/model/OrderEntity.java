@@ -40,6 +40,9 @@ public class OrderEntity {
 
     public static final String COLM_DELIVERED_AT = "delivered_at";
 
+    public static final String COLM_ISSUED_AT = "issued_at";
+
+
     // This is simply a auto incrementing integer
     // When displaying we concatenate it with the prefix "BR"
     // ex: BR1, BR5, BR888
@@ -72,11 +75,13 @@ public class OrderEntity {
     @Column(name = COLM_DELIVERED_AT, nullable = true)
     private LocalDateTime deliveredAt;
 
+    @Column(name = COLM_ISSUED_AT, nullable = true)
+    private LocalDateTime issuedAt;
+
     // The name of this mappedBy attribute is the name of the variable
     // that is annotated with @JoinColumn on the owning side
     // this is the referencing side
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "order")
-    @NotFound(action = NotFoundAction.IGNORE)
     private List<ProductEntryEntity> productEntries;
 
     public OrderEntity() {
@@ -88,6 +93,7 @@ public class OrderEntity {
                        Date dueDate,
                        String note,
                        LocalDateTime deliveredAt,
+                       LocalDateTime issuedAt,
                        List<ProductEntryEntity> productEntries) {
         this.orderID = orderID;
         this.customerOderId = customerOderId;
@@ -95,6 +101,7 @@ public class OrderEntity {
         this.dueDate = dueDate;
         this.note = note;
         this.deliveredAt = deliveredAt;
+        this.issuedAt = issuedAt;
         this.productEntries = productEntries;
     }
 
@@ -150,6 +157,14 @@ public class OrderEntity {
         this.deliveredAt = deliveredAt;
     }
 
+    public LocalDateTime getIssuedAt() {
+        return issuedAt;
+    }
+
+    public void setIssuedAt(LocalDateTime issuedAt) {
+        this.issuedAt = issuedAt;
+    }
+
     public List<ProductEntryEntity> getProductEntries() {
         return productEntries;
     }
@@ -167,9 +182,13 @@ public class OrderEntity {
                 ", dueDate=" + dueDate +
                 ", note='" + note + '\'' +
                 ", deliveredAt=" + deliveredAt +
+                ", issuedAt=" + issuedAt +
                 ", productEntries=" + productEntries +
                 '}';
     }
 }
+
+
+
 
 
