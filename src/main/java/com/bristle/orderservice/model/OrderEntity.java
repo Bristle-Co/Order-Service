@@ -49,7 +49,7 @@ public class OrderEntity {
     @Id
     @GeneratedValue(strategy= GenerationType.IDENTITY)
     @Column(name = COLM_ORDER_ID)
-    private Integer orderID;
+    private Integer orderId;
 
     // There is a unique order Id we get from customer in a order
     // however the format of this string is different from customer to customer
@@ -87,7 +87,7 @@ public class OrderEntity {
     public OrderEntity() {
     }
 
-    public OrderEntity(Integer orderID,
+    public OrderEntity(Integer orderId,
                        String customerOderId,
                        String customerId,
                        Date dueDate,
@@ -95,7 +95,7 @@ public class OrderEntity {
                        LocalDateTime deliveredAt,
                        LocalDateTime issuedAt,
                        List<ProductEntryEntity> productEntries) {
-        this.orderID = orderID;
+        this.orderId = orderId;
         this.customerOderId = customerOderId;
         this.customerId = customerId;
         this.dueDate = dueDate;
@@ -110,11 +110,11 @@ public class OrderEntity {
     // It doesn't support new version of intellij
 
     public Integer getOrderID() {
-        return orderID;
+        return orderId;
     }
 
-    public void setOrderID(Integer orderID) {
-        this.orderID = orderID;
+    public void setOrderID(Integer orderId) {
+        this.orderId = orderId;
     }
 
     public String getCustomerOderId() {
@@ -176,7 +176,7 @@ public class OrderEntity {
     @Override
     public String toString() {
         return "OrderEntity{" +
-                "orderID=" + orderID +
+                "orderID=" + orderId +
                 ", customerOderId='" + customerOderId + '\'' +
                 ", customerId='" + customerId + '\'' +
                 ", dueDate=" + dueDate +
