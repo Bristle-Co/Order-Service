@@ -55,7 +55,7 @@ public class OrderService {
     @Transactional
     public Order upsertOrder(Order orderProto) throws Exception {
         OrderEntity orderEntity = m_orderConverter.protoToEntity(orderProto);
-        if(orderEntity != null){
+        if(orderEntity.getOrderID() != null){
             // this means we're updating
             m_productEntryRepository.deleteProductEntryEntitiesByOrderIdFk(orderEntity.getOrderID());
         }
