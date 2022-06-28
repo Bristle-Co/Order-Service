@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import org.hibernate.annotations.NotFound;
 import org.hibernate.annotations.NotFoundAction;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -55,7 +56,7 @@ public class OrderEntity {
     // however the format of this string is different from customer to customer
     // thus we can not use it as primary key
     @Column(name = COLM_CUSTOMER_ORDER_ID, nullable = true)
-    private String customerOderId;
+    private String customerOrderId;
 
     // Foreign key to customers table
     @Column(name = COLM_CUSTOMER_ID, nullable = true)
@@ -81,14 +82,14 @@ public class OrderEntity {
     // The name of this mappedBy attribute is the name of the variable
     // that is annotated with @JoinColumn on the owning side
     // this is the referencing side
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "order")
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "order", cascade = CascadeType.ALL)
     private List<ProductEntryEntity> productEntries;
 
     public OrderEntity() {
     }
 
     public OrderEntity(Integer orderId,
-                       String customerOderId,
+                       String customerOrderId,
                        String customerId,
                        Date dueDate,
                        String note,
@@ -96,7 +97,7 @@ public class OrderEntity {
                        LocalDateTime issuedAt,
                        List<ProductEntryEntity> productEntries) {
         this.orderId = orderId;
-        this.customerOderId = customerOderId;
+        this.customerOrderId = customerOrderId;
         this.customerId = customerId;
         this.dueDate = dueDate;
         this.note = note;
@@ -117,12 +118,12 @@ public class OrderEntity {
         this.orderId = orderId;
     }
 
-    public String getCustomerOderId() {
-        return customerOderId;
+    public String getcustomerOrderId() {
+        return customerOrderId;
     }
 
-    public void setCustomerOderId(String customerOderId) {
-        this.customerOderId = customerOderId;
+    public void setcustomerOrderId(String customerOrderId) {
+        this.customerOrderId = customerOrderId;
     }
 
     public String getCustomerId() {
@@ -177,7 +178,7 @@ public class OrderEntity {
     public String toString() {
         return "OrderEntity{" +
                 "orderID=" + orderId +
-                ", customerOderId='" + customerOderId + '\'' +
+                ", customerOrderId='" + customerOrderId + '\'' +
                 ", customerId='" + customerId + '\'' +
                 ", dueDate=" + dueDate +
                 ", note='" + note + '\'' +

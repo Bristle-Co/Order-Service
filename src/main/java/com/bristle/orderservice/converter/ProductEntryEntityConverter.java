@@ -32,12 +32,13 @@ public class ProductEntryEntityConverter {
     }
 
     public ProductEntry entityToProto(ProductEntryEntity productEntryEntity) {
-
+        String productEntryId = productEntryEntity.getProductEntryId();
         String model = productEntryEntity.getModel();
         Integer quantity = productEntryEntity.getQuantity();
         Integer price = productEntryEntity.getPrice();
         String productionTicketId = productEntryEntity.getProductTicket_id();
         return ProductEntry.newBuilder()
+                .setProductEntryId(productEntryId == null ? "" : productEntryId)
                 .setModel(model == null ? "" : model)
                 .setQuantity(quantity == null ? Integer.MIN_VALUE : quantity)
                 .setPrice(price == null ? Integer.MIN_VALUE : price)
