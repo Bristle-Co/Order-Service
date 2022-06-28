@@ -60,7 +60,8 @@ public class OrderService {
             m_productEntryRepository.deleteProductEntryEntitiesByOrderIdFk(orderEntity.getOrderID());
         }
         m_orderRepository.save(orderEntity);
-        return orderProto;
+        OrderEntity upsertedOrder = m_orderRepository.findOrderEntityByOrderId(orderEntity.getOrderID());
+        return m_orderConverter.entityToProto(upsertedOrder);
     }
 
     @Transactional(readOnly = true)
@@ -101,5 +102,11 @@ public class OrderService {
         return rs.stream().map(m_orderConverter::entityToProto).collect(Collectors.toList());
     }
 
+    @Transactional
+    public Order deleteOrder(Integer orderId){
+        OrderEntity toBeDeleted = m_orderRepository.findOrderEntityByOrderId(orderId);
+        m_orderRepository.delete(toBeDeleted);
+        return m_orderConverter.entityToProto(toBeDeleted);
+    }
 
 }
