@@ -23,6 +23,9 @@ public class OrderEntitySpec {
 
     public static Specification<OrderEntity> likeCustomerId (String customerId){
         if (customerId == null) return null;
+
+        // use LIKE here for convenience for my mom
+        // minimize the number of fields that uses LIKE instead of "=" cuz it is 10 times more expensive
         return ((root, query, criteriaBuilder) ->
                 criteriaBuilder.like(root.get("customerId"), "%"+customerId+"%"));
     }
