@@ -6,8 +6,8 @@ import com.bristle.proto.common.ApiError;
 import com.bristle.proto.common.ResponseContext;
 import com.bristle.proto.order.DeleteOrderRequest;
 import com.bristle.proto.order.DeleteOrderResponse;
-import com.bristle.proto.order.GetOrderRequest;
-import com.bristle.proto.order.GetOrderResponse;
+import com.bristle.proto.order.GetOrdersRequest;
+import com.bristle.proto.order.GetOrdersResponse;
 import com.bristle.proto.order.Order;
 import com.bristle.proto.order.OrderFilter;
 import com.bristle.proto.order.OrderServiceGrpc;
@@ -17,8 +17,6 @@ import io.grpc.stub.StreamObserver;
 import net.devh.boot.grpc.server.service.GrpcService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.boot.web.servlet.filter.OrderedFilter;
-import org.springframework.web.bind.annotation.DeleteMapping;
 
 import java.util.List;
 
@@ -63,7 +61,7 @@ public class OrderServiceGrpcController extends OrderServiceGrpc.OrderServiceImp
     }
 
     @Override
-    public void getOrders(GetOrderRequest request, StreamObserver<GetOrderResponse> responseObserver) {
+    public void getOrders(GetOrdersRequest request, StreamObserver<GetOrdersResponse> responseObserver) {
         String requestId = request.getRequestContext().getRequestId();
         log.info("Request id: " + requestId + " , upsertOrder grpc request received: " + request.getFilter());
         ResponseContext.Builder responseContextBuilder = ResponseContext.newBuilder();
@@ -73,7 +71,7 @@ public class OrderServiceGrpcController extends OrderServiceGrpc.OrderServiceImp
         try {
             List<Order> orders = m_orderService.getOrders(filter);
             responseObserver.onNext(
-                    GetOrderResponse.newBuilder()
+                    GetOrdersResponse.newBuilder()
                             .addAllOrder(orders)
                             .setResponseContext(responseContextBuilder).build());
 
@@ -84,7 +82,7 @@ public class OrderServiceGrpcController extends OrderServiceGrpc.OrderServiceImp
                     .setExceptionName(e.getClass().getName()));
 
             responseObserver.onNext(
-                    GetOrderResponse.newBuilder()
+                    GetOrdersResponse.newBuilder()
                     .setResponseContext(responseContextBuilder).build());
         }
         responseObserver.onCompleted();

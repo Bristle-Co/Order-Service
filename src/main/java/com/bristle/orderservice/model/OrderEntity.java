@@ -38,13 +38,11 @@ public class OrderEntity {
     public static final String COLM_CUSTOMER_ID= "customer_id";
     public static final String COLM_DUE_DATE = "due_date";
     public static final String COLM_NOTE = "note";
-
     public static final String COLM_DELIVERED_AT = "delivered_at";
-
     public static final String COLM_ISSUED_AT = "issued_at";
 
 
-    // This is simply a auto incrementing integer
+    // This is simply an auto incrementing integer
     // When displaying we concatenate it with the prefix "BR"
     // ex: BR1, BR5, BR888
     @Id
@@ -74,9 +72,11 @@ public class OrderEntity {
     private String note;
 
     @Column(name = COLM_DELIVERED_AT, nullable = true)
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm")
     private LocalDateTime deliveredAt;
 
-    @Column(name = COLM_ISSUED_AT, nullable = true)
+    @Column(name = COLM_ISSUED_AT, nullable = false)
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm")
     private LocalDateTime issuedAt;
 
     // The name of this mappedBy attribute is the name of the variable

@@ -55,7 +55,7 @@ public class OrderService {
     @Transactional
     public Order upsertOrder(Order orderProto) throws Exception {
         OrderEntity orderEntity = m_orderConverter.protoToEntity(orderProto);
-        if(orderEntity.getOrderID() != null){
+        if (orderEntity.getOrderID() != null) {
             // this means we're updating
             m_productEntryRepository.deleteProductEntryEntitiesByOrderIdFk(orderEntity.getOrderID());
         }
@@ -89,13 +89,16 @@ public class OrderService {
                     new Date(filter.getDueDateTo())));
         }
 
-        if(filter.getIssuedAfter() != Long.MIN_VALUE){
-            spec = spec.and(OrderEntitySpec.issuedAfter(LocalDateTime.ofEpochSecond(
-                    filter.getIssuedAfter(), 0, ZoneOffset.UTC)));
+        if (filter.getIssuedAtFrom() != Long.MIN_VALUE && filter.getIssuedAtTo() != Long.MIN_VALUE) {
+            spec = spec.and(OrderEntitySpec.issuedBetween(
+                    LocalDateTime.ofEpochSecond(
+                            filter.getIssuedAtFrom(), 0, ZoneOffset.UTC),
+                    LocalDateTime.ofEpochSecond(
+                            filter.getIssuedAtTo(), 0, ZoneOffset.UTC)));
         }
 
         // TODO modify paging
-        Sort sort = Sort.by(Sort.Direction.DESC,"issuedAt");
+        Sort sort = Sort.by(Sort.Direction.DESC, "issuedAt");
         Pageable paging = PageRequest.of(0, 20, sort);
 
         List<OrderEntity> rs = m_orderRepository.findAll(Specification.where(spec), paging).toList();
@@ -103,7 +106,7 @@ public class OrderService {
     }
 
     @Transactional
-    public Order deleteOrder(Integer orderId){
+    public Order deleteOrder(Integer orderId) {
         OrderEntity toBeDeleted = m_orderRepository.findOrderEntityByOrderId(orderId);
         m_orderRepository.delete(toBeDeleted);
         return m_orderConverter.entityToProto(toBeDeleted);

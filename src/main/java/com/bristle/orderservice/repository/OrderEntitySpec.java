@@ -33,9 +33,9 @@ public class OrderEntitySpec {
                 criteriaBuilder.between(root.get("dueDate"),from,to));
     }
 
-    public static Specification<OrderEntity> issuedAfter (LocalDateTime issuedAt){
-        if (issuedAt == null) return null;
+    public static Specification<OrderEntity> issuedBetween (LocalDateTime from, LocalDateTime to){
+        if (from == null || to == null) return null;
         return ((root, query, criteriaBuilder) ->
-                criteriaBuilder.greaterThanOrEqualTo(root.get("issuedAt"), issuedAt));
+                criteriaBuilder.between(root.get("issuedAt"), from, to));
     }
 }
