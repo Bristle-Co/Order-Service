@@ -81,7 +81,7 @@ public class OrderService {
         }
 
         if (!filter.getCustomerId().equals("")) {
-            spec = spec.and(OrderEntitySpec.equalCustomerId(filter.getCustomerId()));
+            spec = spec.and(OrderEntitySpec.likeCustomerId(filter.getCustomerId()));
         }
 
         if (filter.getDueDateFrom() != Long.MIN_VALUE && filter.getDueDateTo() != Long.MIN_VALUE) {

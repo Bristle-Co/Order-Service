@@ -21,10 +21,10 @@ public class OrderEntitySpec {
                 criteriaBuilder.equal(root.get("customerOrderId"), customerOrderId));
     }
 
-    public static Specification<OrderEntity> equalCustomerId (String customerId){
+    public static Specification<OrderEntity> likeCustomerId (String customerId){
         if (customerId == null) return null;
         return ((root, query, criteriaBuilder) ->
-                criteriaBuilder.equal(root.get("customerId"), customerId));
+                criteriaBuilder.like(root.get("customerId"), "%"+customerId+"%"));
     }
 
     public static Specification<OrderEntity> dueDateBetween (Date from, Date to){
