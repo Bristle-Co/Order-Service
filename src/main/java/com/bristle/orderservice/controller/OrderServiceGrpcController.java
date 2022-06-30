@@ -24,13 +24,10 @@ import java.util.List;
 public class OrderServiceGrpcController extends OrderServiceGrpc.OrderServiceImplBase {
 
     private final OrderService m_orderService;
-    private final OrderEntityConverter m_orderConverter;
-
     Logger log = LoggerFactory.getLogger(OrderServiceGrpcController.class);
 
-    OrderServiceGrpcController(OrderService orderService, OrderEntityConverter orderConverter) {
+    OrderServiceGrpcController(OrderService orderService) {
         this.m_orderService = orderService;
-        this.m_orderConverter = orderConverter;
     }
 
     @Override

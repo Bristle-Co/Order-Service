@@ -60,6 +60,7 @@ public class OrderService {
             m_productEntryRepository.deleteProductEntryEntitiesByOrderIdFk(orderEntity.getOrderID());
         }
         m_orderRepository.save(orderEntity);
+        // here the order id actually gets assigned by hibernate
         OrderEntity upsertedOrder = m_orderRepository.findOrderEntityByOrderId(orderEntity.getOrderID());
         return m_orderConverter.entityToProto(upsertedOrder);
     }
