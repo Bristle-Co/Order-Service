@@ -98,9 +98,8 @@ public class OrderService {
                             filter.getIssuedAtTo(), 0, ZoneOffset.UTC)));
         }
 
-        // TODO modify paging
         Sort sort = Sort.by(Sort.Direction.DESC, "issuedAt");
-        Pageable paging = PageRequest.of(0, 20, sort);
+        Pageable paging = PageRequest.of(filter.getPageIndex(), filter.getPageSize(), sort);
 
         List<OrderEntity> rs = m_orderRepository.findAll(Specification.where(spec), paging).toList();
         return rs.stream().map(m_orderConverter::entityToProto).collect(Collectors.toList());
