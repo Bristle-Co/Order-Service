@@ -66,7 +66,7 @@ public class OrderServiceGrpcController extends OrderServiceGrpc.OrderServiceImp
         OrderFilter filter = request.getFilter();
 
         try {
-            List<Order> orders = m_orderService.getOrders(filter);
+            List<Order> orders = m_orderService.getOrders(filter, request.getPageIndex(), request.getPageSize());
             responseObserver.onNext(
                     GetOrdersResponse.newBuilder()
                             .addAllOrder(orders)

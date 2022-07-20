@@ -3,7 +3,6 @@ package com.bristle.orderservice.service;
 
 import com.bristle.orderservice.converter.OrderEntityConverter;
 import com.bristle.orderservice.model.OrderEntity;
-import com.bristle.orderservice.model.ProductEntryEntity;
 import com.bristle.orderservice.repository.OrderEntitySpec;
 import com.bristle.orderservice.repository.OrderRepository;
 import com.bristle.orderservice.repository.ProductEntryRepository;
@@ -25,11 +24,8 @@ import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
-import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
@@ -66,7 +62,7 @@ public class OrderService {
     }
 
     @Transactional(readOnly = true)
-    public List<Order> getOrders(OrderFilter filter) throws Exception {
+    public List<Order> getOrders(OrderFilter filter, Integer pageIndex, Integer pageSize) throws Exception {
         Specification<OrderEntity> spec = new Specification<OrderEntity>() {
             @Override
             public Predicate toPredicate(Root<OrderEntity> root, CriteriaQuery<?> query, CriteriaBuilder criteriaBuilder) {
@@ -99,7 +95,7 @@ public class OrderService {
         }
 
         Sort sort = Sort.by(Sort.Direction.DESC, "issuedAt");
-        Pageable paging = PageRequest.of(filter.getPageIndex(), filter.getPageSize(), sort);
+        Pageable paging = PageRequest.of(pageIndex, pageSize, sort);
 
         List<OrderEntity> rs = m_orderRepository.findAll(Specification.where(spec), paging).toList();
         return rs.stream().map(m_orderConverter::entityToProto).collect(Collectors.toList());
