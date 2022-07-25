@@ -81,12 +81,12 @@ public class OrderService {
             spec = spec.and(OrderEntitySpec.likeCustomerId(filter.getCustomerId()));
         }
 
-        if (filter.getDueDateFrom() != Long.MIN_VALUE && filter.getDueDateTo() != Long.MIN_VALUE) {
+        if (filter.getDueDateFrom() != 0 && filter.getDueDateFrom() != Long.MIN_VALUE && filter.getDueDateTo() != Long.MIN_VALUE) {
             spec = spec.and(OrderEntitySpec.dueDateBetween(new Date(filter.getDueDateFrom()),
                     new Date(filter.getDueDateTo())));
         }
 
-        if (filter.getIssuedAtFrom() != Long.MIN_VALUE && filter.getIssuedAtTo() != Long.MIN_VALUE) {
+        if (filter.getIssuedAtFrom() != 0 && filter.getIssuedAtFrom() != Long.MIN_VALUE && filter.getIssuedAtTo() != Long.MIN_VALUE) {
             spec = spec.and(OrderEntitySpec.issuedBetween(
                     LocalDateTime.ofEpochSecond(
                             filter.getIssuedAtFrom(), 0, ZoneOffset.UTC),
