@@ -110,7 +110,7 @@ public class OrderEntity {
     // Lombok could work well here but I don't wanna use it lol
     // It doesn't support new version of intellij
 
-    public Integer getOrderID() {
+    public Integer getOrderId() {
         return orderId;
     }
 

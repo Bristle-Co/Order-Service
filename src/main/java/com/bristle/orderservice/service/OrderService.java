@@ -51,13 +51,13 @@ public class OrderService {
     @Transactional
     public Order upsertOrder(Order orderProto) throws Exception {
         OrderEntity orderEntity = m_orderConverter.protoToEntity(orderProto);
-        if (orderEntity.getOrderID() != null) {
+        if (orderEntity.getOrderId() != null) {
             // this means we're updating
-            m_productEntryRepository.deleteProductEntryEntitiesByOrderIdFk(orderEntity.getOrderID());
+            m_productEntryRepository.deleteProductEntryEntitiesByOrderIdFk(orderEntity.getOrderId());
         }
         m_orderRepository.save(orderEntity);
         // here the order id actually gets assigned by hibernate
-        OrderEntity upsertedOrder = m_orderRepository.findOrderEntityByOrderId(orderEntity.getOrderID());
+        OrderEntity upsertedOrder = m_orderRepository.findOrderEntityByOrderId(orderEntity.getOrderId());
         return m_orderConverter.entityToProto(upsertedOrder);
     }
 
