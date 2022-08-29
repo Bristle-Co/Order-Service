@@ -6,9 +6,11 @@ import com.bristle.proto.order.Order;
 import com.bristle.proto.order.ProductEntry;
 import org.springframework.stereotype.Component;
 
+import java.time.Instant;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.time.ZoneOffset;
-import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -33,13 +35,13 @@ public class OrderEntityConverter {
                 orderId == Integer.MIN_VALUE ? null : orderId,
                 customerOrderId.equals("") ? null : customerOrderId,
                 customerId.equals("") ? null : customerId,
-                dueDate == Long.MIN_VALUE ? null : new Date(dueDate),
+                dueDate == Long.MIN_VALUE ? null : Instant.ofEpochMilli(dueDate * 1000).atZone(ZoneId.of("UTC")).toLocalDate(),
                 note.equals("") ? null : note,
                 deliveredAt == Long.MIN_VALUE ? null : LocalDateTime.ofEpochSecond(deliveredAt, 0, ZoneOffset.UTC),
                 issuedAt == Long.MIN_VALUE ? null : LocalDateTime.ofEpochSecond(issuedAt, 0, ZoneOffset.UTC)
-                ,null);
+                , null);
 
-        if(orderProto.getProductEntryCount() > 0) {
+        if (orderProto.getProductEntryCount() > 0) {
             List<ProductEntryEntity> entityList
                     = orderProto.getProductEntryList().stream().map(proto -> m_productEntryConverter.protoToEntity(proto, result)).collect(Collectors.toList());
             result.setProductEntries(entityList);
@@ -52,7 +54,7 @@ public class OrderEntityConverter {
         Integer orderId = orderEntity.getOrderId();
         String customerOrderId = orderEntity.getcustomerOrderId();
         String customerId = orderEntity.getCustomerId();
-        Date dueDate = orderEntity.getDueDate();
+        LocalDate dueDate = orderEntity.getDueDate();
         String note = orderEntity.getNote();
         LocalDateTime deliveredAt = orderEntity.getDeliveredAt();
         LocalDateTime issuedAt = orderEntity.getIssuedAt();
@@ -61,18 +63,17 @@ public class OrderEntityConverter {
                 .setOrderId(orderId == null ? Integer.MIN_VALUE : orderId)
                 .setCustomerOrderId(customerOrderId == null ? "" : customerOrderId)
                 .setCustomerId(customerId == null ? "" : customerId)
-                .setDueDate(dueDate == null ? Long.MIN_VALUE : dueDate.getTime())
+                .setDueDate(dueDate == null ? Long.MIN_VALUE : dueDate.atStartOfDay().toEpochSecond(ZoneOffset.UTC))
                 .setNote(note == null ? "" : note)
                 .setDeliveredAt(deliveredAt == null ? Long.MIN_VALUE : deliveredAt.toEpochSecond(ZoneOffset.UTC))
                 .setIssuedAt(issuedAt == null ? Long.MIN_VALUE : issuedAt.toEpochSecond(ZoneOffset.UTC));
 
-        if(orderEntity.getProductEntries().size() > 0 ){
+        if (orderEntity.getProductEntries().size() > 0) {
             List<ProductEntry> productEntriesList = orderEntity.getProductEntries().stream()
                     .map(m_productEntryConverter::entityToProto).collect(Collectors.toList());
             result.addAllProductEntry(productEntriesList);
         }
 
         return result.build();
-
     }
 }

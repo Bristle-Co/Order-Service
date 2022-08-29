@@ -1,10 +1,7 @@
 package com.bristle.orderservice.model;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import org.hibernate.annotations.NotFound;
-import org.hibernate.annotations.NotFoundAction;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -12,10 +9,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.Date;
 import java.util.List;
 
 // This class is used for database definition in relational database
@@ -38,11 +33,13 @@ public class OrderEntity {
     public static final String COLM_CUSTOMER_ID= "customer_id";
     public static final String COLM_DUE_DATE = "due_date";
     public static final String COLM_NOTE = "note";
+
     public static final String COLM_DELIVERED_AT = "delivered_at";
+
     public static final String COLM_ISSUED_AT = "issued_at";
 
 
-    // This is simply an auto incrementing integer
+    // This is simply a auto incrementing integer
     // When displaying we concatenate it with the prefix "BR"
     // ex: BR1, BR5, BR888
     @Id
@@ -64,9 +61,8 @@ public class OrderEntity {
     // I use java.util.Date + @Temporal
     // because I want to use the constructor that takes epoch long
     @Column(name = COLM_DUE_DATE, nullable = true)
-    @Temporal(TemporalType.DATE)
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
-    private Date dueDate;
+    private LocalDate dueDate;
 
     @Column(name = COLM_NOTE, nullable = true)
     private String note;
@@ -75,14 +71,14 @@ public class OrderEntity {
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm")
     private LocalDateTime deliveredAt;
 
-    @Column(name = COLM_ISSUED_AT, nullable = false)
+    @Column(name = COLM_ISSUED_AT, nullable = true)
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm")
     private LocalDateTime issuedAt;
 
     // The name of this mappedBy attribute is the name of the variable
     // that is annotated with @JoinColumn on the owning side
     // this is the referencing side
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "order", cascade = CascadeType.ALL)
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "order")
     private List<ProductEntryEntity> productEntries;
 
     public OrderEntity() {
@@ -91,7 +87,7 @@ public class OrderEntity {
     public OrderEntity(Integer orderId,
                        String customerOrderId,
                        String customerId,
-                       Date dueDate,
+                       LocalDate dueDate,
                        String note,
                        LocalDateTime deliveredAt,
                        LocalDateTime issuedAt,
@@ -114,7 +110,7 @@ public class OrderEntity {
         return orderId;
     }
 
-    public void setOrderID(Integer orderId) {
+    public void setOrderId(Integer orderId) {
         this.orderId = orderId;
     }
 
@@ -134,11 +130,11 @@ public class OrderEntity {
         this.customerId = customerId;
     }
 
-    public Date getDueDate() {
+    public LocalDate getDueDate() {
         return dueDate;
     }
 
-    public void setDueDate(Date dueDate) {
+    public void setDueDate(LocalDate dueDate) {
         this.dueDate = dueDate;
     }
 
@@ -177,7 +173,7 @@ public class OrderEntity {
     @Override
     public String toString() {
         return "OrderEntity{" +
-                "orderID=" + orderId +
+                "orderId=" + orderId +
                 ", customerOrderId='" + customerOrderId + '\'' +
                 ", customerId='" + customerId + '\'' +
                 ", dueDate=" + dueDate +
@@ -188,8 +184,3 @@ public class OrderEntity {
                 '}';
     }
 }
-
-
-
-
-
