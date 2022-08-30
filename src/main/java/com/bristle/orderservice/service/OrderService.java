@@ -3,11 +3,13 @@ package com.bristle.orderservice.service;
 
 import com.bristle.orderservice.converter.OrderEntityConverter;
 import com.bristle.orderservice.model.OrderEntity;
+import com.bristle.orderservice.model.ProductEntryEntity;
 import com.bristle.orderservice.repository.OrderEntitySpec;
 import com.bristle.orderservice.repository.OrderRepository;
 import com.bristle.orderservice.repository.ProductEntryRepository;
 import com.bristle.proto.order.Order;
 import com.bristle.proto.order.OrderFilter;
+import com.bristle.proto.order.ProductEntry;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -53,8 +55,28 @@ public class OrderService {
         OrderEntity orderEntity = m_orderConverter.protoToEntity(orderProto);
         if (orderEntity.getOrderId() != null) {
             // this means we're updating
-            m_productEntryRepository.deleteProductEntryEntitiesByOrderIdFk(orderEntity.getOrderId());
+            List<String> toBeUpdated = orderEntity.getProductEntries().stream().map(ProductEntryEntity::getProductEntryId).collect(Collectors.toList());
+            List<String> existingPDIds
+                    = m_productEntryRepository.getProductEntriesIdsByOrderId(orderEntity.getOrderId());
+            List<String> toBeDeleted
+                    = existingPDIds.stream().filter( item -> !toBeUpdated.contains(item)).collect(Collectors.toList());
+            orderEntity.getProductEntries().forEach(item -> {
+                m_productEntryRepository.replaceProductEntryEntitiesById(
+                        item.getProductEntryId(),
+                        // converter should handle this field so when product entry is unassigned
+                        // value is null
+                        item.getProductTicketId(),
+                        orderEntity.getOrderId(),
+                        item.getPrice(),
+                        item.getModel(),
+                        item.getQuantity()
+                );
+            });
+            m_productEntryRepository.deleteProductEntryEntitiesById(toBeDeleted);
         }
+
+        // This does "SELECT" then "UPDATE" to each and every product entries
+        // need to optimize such query
         m_orderRepository.save(orderEntity);
         // here the order id actually gets assigned by hibernate
         OrderEntity upsertedOrder = m_orderRepository.findOrderEntityByOrderId(orderEntity.getOrderId());
