@@ -2,12 +2,14 @@ package com.bristle.orderservice.service;
 
 
 import com.bristle.orderservice.converter.OrderEntityConverter;
+import com.bristle.orderservice.converter.ProductEntryEntityConverter;
 import com.bristle.orderservice.model.OrderEntity;
 import com.bristle.orderservice.model.ProductEntryEntity;
 import com.bristle.orderservice.repository.OrderEntitySpec;
 import com.bristle.orderservice.repository.OrderRepository;
 import com.bristle.orderservice.repository.ProductEntryRepository;
 import com.bristle.proto.order.Order;
+import com.bristle.proto.order.ProductEntry;
 import com.bristle.proto.order.OrderFilter;
 import com.bristle.proto.order.ProductEntry;
 import org.slf4j.Logger;
@@ -39,14 +41,19 @@ public class OrderService {
 
     private final OrderEntityConverter m_orderConverter;
 
+    private final ProductEntryEntityConverter m_productEntryConverter;
+
+
     Logger log = LoggerFactory.getLogger(OrderService.class);
 
     @Autowired
     public OrderService(OrderRepository m_orderRepository,
                         OrderEntityConverter orderConverter,
+                        ProductEntryEntityConverter productEntryConverter,
                         ProductEntryRepository productEntryRepository) {
         this.m_orderRepository = m_orderRepository;
         this.m_orderConverter = orderConverter;
+        this.m_productEntryConverter = productEntryConverter;
         this.m_productEntryRepository = productEntryRepository;
     }
 
@@ -130,4 +137,9 @@ public class OrderService {
         return m_orderConverter.entityToProto(toBeDeleted);
     }
 
+    @Transactional(readOnly = true)
+    public List<ProductEntry> getUnAssignedProductEntries() {
+        List<ProductEntryEntity> rs = m_productEntryRepository.getUnAssignedProductEntries();
+        return rs.stream().map(m_productEntryConverter::entityToProto).collect(Collectors.toList());
+    }
 }

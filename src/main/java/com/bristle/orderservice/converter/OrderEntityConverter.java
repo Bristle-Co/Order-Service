@@ -73,7 +73,13 @@ public class OrderEntityConverter {
 
         if (orderEntity.getProductEntries().size() > 0) {
             List<ProductEntry> productEntriesList = orderEntity.getProductEntries().stream()
-                    .map(m_productEntryConverter::entityToProto).collect(Collectors.toList());
+                    .map( item -> {
+                        // make sure to initialize the orderId field in productEntry
+                        // since it is not mapped by hiberate
+                        // and this is expected
+                        item.setOrderId(orderEntity.getOrderId());
+                        return m_productEntryConverter.entityToProto(item);
+                    }).collect(Collectors.toList());
             result.addAllProductEntry(productEntriesList);
         }
 

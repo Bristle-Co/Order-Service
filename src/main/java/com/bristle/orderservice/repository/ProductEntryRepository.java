@@ -40,4 +40,8 @@ public interface ProductEntryRepository extends JpaRepository<ProductEntryEntity
             ProductEntryEntity.COLM_PRODUCT_ENTRY_ID + " IN (?1)", nativeQuery = true)
     @Modifying
     void deleteProductEntryEntitiesById(List<String> productEntryIds);
+
+    @Query(value = "SELECT * FROM " + ProductEntryEntity.TABLE_NAME + " WHERE " +
+            ProductEntryEntity.COLM_PRODUCT_TICKET_ID + " IS NULL", nativeQuery = true)
+    List<ProductEntryEntity> getUnAssignedProductEntries();
 }

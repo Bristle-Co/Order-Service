@@ -1,6 +1,7 @@
 package com.bristle.orderservice.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import org.hibernate.annotations.NotFound;
 import org.hibernate.annotations.NotFoundAction;
 
@@ -11,6 +12,7 @@ import javax.persistence.Id;
 import javax.persistence.IdClass;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.Transient;
 
 // This table has many-to-one relationship with the orders table
 // One order could have many product entries(規格)
@@ -55,16 +57,29 @@ public class ProductEntryEntity {
     @NotFound(action = NotFoundAction.IGNORE)
     private OrderEntity order;
 
+    @Transient
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    private Integer orderId;
+
     public ProductEntryEntity() {
     }
 
-    public ProductEntryEntity(String productEntryId, String model, Integer quantity, Integer price, String productTicket_id, OrderEntity order) {
+    public ProductEntryEntity(String productEntryId, String model, Integer quantity, Integer price, String productTicketId, OrderEntity order, Integer orderId) {
         this.productEntryId = productEntryId;
         this.model = model;
         this.quantity = quantity;
         this.price = price;
-        this.productTicketId = productTicket_id;
+        this.productTicketId = productTicketId;
         this.order = order;
+        this.orderId = orderId;
+    }
+
+    public Integer getOrderId() {
+        return orderId;
+    }
+
+    public void setOrderId(Integer orderId) {
+        this.orderId = orderId;
     }
 
     public String getProductEntryId() {
