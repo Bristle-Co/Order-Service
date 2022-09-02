@@ -49,6 +49,7 @@ public class OrderServiceGrpcController extends OrderServiceGrpc.OrderServiceImp
 
         } catch (Exception e) {
             log.error("Request id: " + requestId + " " + e.getMessage());
+            e.printStackTrace();
             responseContextBuilder.setError(ApiError.newBuilder()
                     .setErrorMessage(e.getMessage())
                     .setExceptionName(e.getClass().getName()));

@@ -55,7 +55,7 @@ public class OrderEntityConverter {
 
     public Order entityToProto(OrderEntity orderEntity) {
         Integer orderId = orderEntity.getOrderId();
-        String customerOrderId = orderEntity.getcustomerOrderId();
+        String customerOrderId = orderEntity.getCustomerOrderId();
         String customerId = orderEntity.getCustomerId();
         LocalDate dueDate = orderEntity.getDueDate();
         String note = orderEntity.getNote();
@@ -74,11 +74,7 @@ public class OrderEntityConverter {
         if (orderEntity.getProductEntries().size() > 0) {
             List<ProductEntry> productEntriesList = orderEntity.getProductEntries().stream()
                     .map( item -> {
-                        // make sure to initialize the orderId field in productEntry
-                        // since it is not mapped by hiberate
-                        // and this is expected
-                        item.setOrderId(orderEntity.getOrderId());
-                        return m_productEntryConverter.entityToProto(item);
+                        return m_productEntryConverter.entityToProto(item, orderEntity);
                     }).collect(Collectors.toList());
             result.addAllProductEntry(productEntriesList);
         }

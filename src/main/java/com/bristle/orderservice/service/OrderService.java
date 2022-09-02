@@ -58,9 +58,9 @@ public class OrderService {
     }
 
     @Transactional
-    public Order upsertOrder(Order orderProto) throws Exception {
+    public Order upsertOrder(Order orderProto) {
         OrderEntity orderEntity = m_orderConverter.protoToEntity(orderProto);
-        if (orderEntity.getOrderId() != null) {
+        if (orderProto.getOrderId() != Integer.MIN_VALUE) {
             // this means we're updating
             List<String> toBeUpdated = orderEntity.getProductEntries().stream().map(ProductEntryEntity::getProductEntryId).collect(Collectors.toList());
             List<String> existingPDIds
@@ -84,8 +84,8 @@ public class OrderService {
 
         // This does "SELECT" then "UPDATE" to each and every product entries
         // need to optimize such query
-        m_orderRepository.save(orderEntity);
         // here the order id actually gets assigned by hibernate
+        m_orderRepository.save(orderEntity);
         OrderEntity upsertedOrder = m_orderRepository.findOrderEntityByOrderId(orderEntity.getOrderId());
         return m_orderConverter.entityToProto(upsertedOrder);
     }

@@ -114,11 +114,11 @@ public class OrderEntity {
         this.orderId = orderId;
     }
 
-    public String getcustomerOrderId() {
+    public String getCustomerOrderId() {
         return customerOrderId;
     }
 
-    public void setcustomerOrderId(String customerOrderId) {
+    public void setCustomerOrderId(String customerOrderId) {
         this.customerOrderId = customerOrderId;
     }
 

@@ -53,35 +53,19 @@ public class ProductEntryEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = COLM_ORDER_ID_FK, referencedColumnName = OrderEntity.COLM_ORDER_ID)
-    @JsonIgnore
-    @NotFound(action = NotFoundAction.IGNORE)
     private OrderEntity order;
-
-    @Transient
-    @JsonInclude(JsonInclude.Include.NON_NULL)
-    private Integer orderId;
 
     public ProductEntryEntity() {
     }
 
-    public ProductEntryEntity(String productEntryId, String model, Integer quantity, Integer price, String productTicketId, OrderEntity order, Integer orderId) {
+    public ProductEntryEntity(String productEntryId, String model, Integer quantity, Integer price, String productTicketId, OrderEntity order) {
         this.productEntryId = productEntryId;
         this.model = model;
         this.quantity = quantity;
         this.price = price;
         this.productTicketId = productTicketId;
         this.order = order;
-        this.orderId = orderId;
     }
-
-    public Integer getOrderId() {
-        return orderId;
-    }
-
-    public void setOrderId(Integer orderId) {
-        this.orderId = orderId;
-    }
-
     public String getProductEntryId() {
         return productEntryId;
     }
