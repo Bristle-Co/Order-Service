@@ -80,12 +80,12 @@ public class OrderService {
                 );
             });
             m_productEntryRepository.deleteProductEntryEntitiesById(toBeDeleted);
+            m_orderRepository.save(orderEntity);
+        } else {
+            m_orderRepository.save(orderEntity);
+            m_productEntryRepository.saveAll(orderEntity.getProductEntries());
         }
 
-        // This does "SELECT" then "UPDATE" to each and every product entries
-        // need to optimize such query
-        // here the order id actually gets assigned by hibernate
-        m_orderRepository.save(orderEntity);
         OrderEntity upsertedOrder = m_orderRepository.findOrderEntityByOrderId(orderEntity.getOrderId());
         return m_orderConverter.entityToProto(upsertedOrder);
     }
