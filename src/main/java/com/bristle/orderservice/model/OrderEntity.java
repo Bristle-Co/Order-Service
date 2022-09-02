@@ -2,6 +2,7 @@ package com.bristle.orderservice.model;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -78,7 +79,7 @@ public class OrderEntity {
     // The name of this mappedBy attribute is the name of the variable
     // that is annotated with @JoinColumn on the owning side
     // this is the referencing side
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "order")
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "order", cascade = CascadeType.ALL)
     private List<ProductEntryEntity> productEntries;
 
     public OrderEntity() {

@@ -53,6 +53,7 @@ public class ProductEntryEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = COLM_ORDER_ID_FK, referencedColumnName = OrderEntity.COLM_ORDER_ID)
+    @NotFound(action = NotFoundAction.IGNORE)
     private OrderEntity order;
 
     public ProductEntryEntity() {

@@ -80,12 +80,9 @@ public class OrderService {
                 );
             });
             m_productEntryRepository.deleteProductEntryEntitiesById(toBeDeleted);
-            m_orderRepository.save(orderEntity);
-        } else {
-            m_orderRepository.save(orderEntity);
-            m_productEntryRepository.saveAll(orderEntity.getProductEntries());
         }
 
+        m_orderRepository.save(orderEntity);
         OrderEntity upsertedOrder = m_orderRepository.findOrderEntityByOrderId(orderEntity.getOrderId());
         return m_orderConverter.entityToProto(upsertedOrder);
     }
