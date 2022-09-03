@@ -89,6 +89,29 @@ public class OrderService {
 
     @Transactional(readOnly = true)
     public List<Order> getOrders(OrderFilter filter, Integer pageIndex, Integer pageSize) throws Exception {
+
+        Specification<OrderEntity> spec = mapFilterToSpec(filter);
+        Sort sort = Sort.by(Sort.Direction.DESC, "issuedAt");
+        Pageable paging = PageRequest.of(pageIndex, pageSize, sort);
+
+        List<OrderEntity> rs = m_orderRepository.findAll(Specification.where(spec), paging).toList();
+        return rs.stream().map(m_orderConverter::entityToProto).collect(Collectors.toList());
+    }
+
+    @Transactional
+    public Order deleteOrder(Integer orderId) {
+        OrderEntity toBeDeleted = m_orderRepository.findOrderEntityByOrderId(orderId);
+        m_orderRepository.delete(toBeDeleted);
+        return m_orderConverter.entityToProto(toBeDeleted);
+    }
+
+    @Transactional(readOnly = true)
+    public List<ProductEntry> getUnAssignedProductEntries() {
+        List<ProductEntryEntity> rs = m_productEntryRepository.getUnAssignedProductEntries();
+        return rs.stream().map(m_productEntryConverter::entityToProto).collect(Collectors.toList());
+    }
+
+    private Specification<OrderEntity> mapFilterToSpec(OrderFilter filter){
         Specification<OrderEntity> spec = new Specification<OrderEntity>() {
             @Override
             public Predicate toPredicate(Root<OrderEntity> root, CriteriaQuery<?> query, CriteriaBuilder criteriaBuilder) {
@@ -120,23 +143,6 @@ public class OrderService {
                             filter.getIssuedAtTo(), 0, ZoneOffset.UTC)));
         }
 
-        Sort sort = Sort.by(Sort.Direction.DESC, "issuedAt");
-        Pageable paging = PageRequest.of(pageIndex, pageSize, sort);
-
-        List<OrderEntity> rs = m_orderRepository.findAll(Specification.where(spec), paging).toList();
-        return rs.stream().map(m_orderConverter::entityToProto).collect(Collectors.toList());
-    }
-
-    @Transactional
-    public Order deleteOrder(Integer orderId) {
-        OrderEntity toBeDeleted = m_orderRepository.findOrderEntityByOrderId(orderId);
-        m_orderRepository.delete(toBeDeleted);
-        return m_orderConverter.entityToProto(toBeDeleted);
-    }
-
-    @Transactional(readOnly = true)
-    public List<ProductEntry> getUnAssignedProductEntries() {
-        List<ProductEntryEntity> rs = m_productEntryRepository.getUnAssignedProductEntries();
-        return rs.stream().map(m_productEntryConverter::entityToProto).collect(Collectors.toList());
+        return spec;
     }
 }
