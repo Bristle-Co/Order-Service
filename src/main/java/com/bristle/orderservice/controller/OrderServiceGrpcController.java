@@ -7,10 +7,7 @@ import com.bristle.proto.order.DeleteOrderRequest;
 import com.bristle.proto.order.DeleteOrderResponse;
 import com.bristle.proto.order.GetOrdersRequest;
 import com.bristle.proto.order.GetOrdersResponse;
-import com.bristle.proto.order.GetUnAssignedProductEntriesRequest;
-import com.bristle.proto.order.GetUnAssignedProductEntriesResponse;
 import com.bristle.proto.order.Order;
-import com.bristle.proto.order.ProductEntry;
 import com.bristle.proto.order.OrderFilter;
 import com.bristle.proto.order.OrderServiceGrpc;
 import com.bristle.proto.order.UpsertOrderRequest;
@@ -112,35 +109,6 @@ public class OrderServiceGrpcController extends OrderServiceGrpc.OrderServiceImp
 
             responseObserver.onNext(
                     DeleteOrderResponse.newBuilder()
-                            .setResponseContext(responseContextBuilder).build());
-        }
-        responseObserver.onCompleted();
-    }
-
-    @Override
-    public void getUnAssignedProductEntries(GetUnAssignedProductEntriesRequest request, StreamObserver<GetUnAssignedProductEntriesResponse> responseObserver) {
-        String requestId = request.getRequestContext().getRequestId();
-        log.info("Request id: " + requestId + " , getUnAssignedProductEntries grpc request received.");
-        ResponseContext.Builder responseContextBuilder = ResponseContext.newBuilder();
-        responseContextBuilder.setRequestId(requestId);
-
-        try {
-            List<ProductEntry> unAssignedProductEntries
-                    = m_orderService.getUnAssignedProductEntries();
-            responseObserver.onNext(
-                    GetUnAssignedProductEntriesResponse.newBuilder()
-                            .addAllProductEntry(unAssignedProductEntries)
-                            .setResponseContext(responseContextBuilder).build());
-
-        } catch (Exception e) {
-            log.error("Request id: " + requestId + " " + e.getMessage());
-            e.printStackTrace();
-            responseContextBuilder.setError(ApiError.newBuilder()
-                    .setErrorMessage(e.getMessage())
-                    .setExceptionName(e.getClass().getName()));
-
-            responseObserver.onNext(
-                    GetUnAssignedProductEntriesResponse.newBuilder()
                             .setResponseContext(responseContextBuilder).build());
         }
         responseObserver.onCompleted();

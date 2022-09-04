@@ -44,4 +44,11 @@ public interface ProductEntryRepository extends JpaRepository<ProductEntryEntity
     @Query(value = "SELECT * FROM " + ProductEntryEntity.TABLE_NAME + " WHERE " +
             ProductEntryEntity.COLM_PRODUCT_TICKET_ID + " IS NULL", nativeQuery = true)
     List<ProductEntryEntity> getUnAssignedProductEntries();
+
+
+    @Query(value = "UPDATE " + ProductEntryEntity.TABLE_NAME + " SET " +
+            ProductEntryEntity.COLM_PRODUCT_TICKET_ID + " = ?2 WHERE " +
+            ProductEntryEntity.COLM_PRODUCT_ENTRY_ID + " = ?1")
+    @Modifying
+    void updateProductTicketIdByProductEntryId(String productEntryId, String productTicketId);
 }

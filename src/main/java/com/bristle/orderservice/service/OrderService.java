@@ -11,7 +11,6 @@ import com.bristle.orderservice.repository.ProductEntryRepository;
 import com.bristle.proto.order.Order;
 import com.bristle.proto.order.ProductEntry;
 import com.bristle.proto.order.OrderFilter;
-import com.bristle.proto.order.ProductEntry;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -103,12 +102,6 @@ public class OrderService {
         OrderEntity toBeDeleted = m_orderRepository.findOrderEntityByOrderId(orderId);
         m_orderRepository.delete(toBeDeleted);
         return m_orderConverter.entityToProto(toBeDeleted);
-    }
-
-    @Transactional(readOnly = true)
-    public List<ProductEntry> getUnAssignedProductEntries() {
-        List<ProductEntryEntity> rs = m_productEntryRepository.getUnAssignedProductEntries();
-        return rs.stream().map(m_productEntryConverter::entityToProto).collect(Collectors.toList());
     }
 
     private Specification<OrderEntity> mapFilterToSpec(OrderFilter filter){
