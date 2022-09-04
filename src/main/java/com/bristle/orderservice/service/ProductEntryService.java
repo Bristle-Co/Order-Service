@@ -1,15 +1,17 @@
 package com.bristle.orderservice.service;
 
-import com.bristle.orderservice.converter.OrderEntityConverter;
 import com.bristle.orderservice.converter.ProductEntryEntityConverter;
 import com.bristle.orderservice.model.ProductEntryEntity;
 import com.bristle.orderservice.repository.ProductEntryRepository;
 import com.bristle.proto.order.ProductEntry;
+import com.bristle.proto.order.ProductEntryFilterField;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -29,9 +31,27 @@ public class ProductEntryService {
     }
 
     @Transactional(readOnly = true)
-    public List<ProductEntry> getUnAssignedProductEntries() {
-        List<ProductEntryEntity> rs = m_productEntryRepository.getUnAssignedProductEntries();
-        return rs.stream().map(m_productEntryConverter::entityToProto).collect(Collectors.toList());
+    public List<ProductEntry> getProductEntries(ProductEntryFilterField field, String productEntryId) throws Exception {
+        List<ProductEntry> rs;
+        switch (field) {
+            case PRODUCT_ENTRY_ID:
+                Optional<ProductEntryEntity> productEntry = m_productEntryRepository.findById(productEntryId);
+                rs = productEntry.map(productEntryEntity ->
+                        Arrays.asList(m_productEntryConverter.entityToProto(productEntryEntity)))
+                        .orElse(Collections.emptyList());
+                break;
+            case UNASSIGNED:
+                rs = m_productEntryRepository.getUnAssignedProductEntries()
+                        .stream()
+                        .map(m_productEntryConverter::entityToProto)
+                        .collect(Collectors.toList());
+                break;
+
+            default:
+                throw new Exception("Unknown product entry filter field");
+
+        }
+        return rs;
     }
 
     @Transactional

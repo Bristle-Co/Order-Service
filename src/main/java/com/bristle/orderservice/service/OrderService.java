@@ -9,7 +9,6 @@ import com.bristle.orderservice.repository.OrderEntitySpec;
 import com.bristle.orderservice.repository.OrderRepository;
 import com.bristle.orderservice.repository.ProductEntryRepository;
 import com.bristle.proto.order.Order;
-import com.bristle.proto.order.ProductEntry;
 import com.bristle.proto.order.OrderFilter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -40,9 +39,6 @@ public class OrderService {
 
     private final OrderEntityConverter m_orderConverter;
 
-    private final ProductEntryEntityConverter m_productEntryConverter;
-
-
     Logger log = LoggerFactory.getLogger(OrderService.class);
 
     @Autowired
@@ -52,7 +48,6 @@ public class OrderService {
                         ProductEntryRepository productEntryRepository) {
         this.m_orderRepository = m_orderRepository;
         this.m_orderConverter = orderConverter;
-        this.m_productEntryConverter = productEntryConverter;
         this.m_productEntryRepository = productEntryRepository;
     }
 

@@ -4,11 +4,12 @@ import com.bristle.orderservice.service.ProductEntryService;
 import com.bristle.orderservice.util.UuidUtils;
 import com.bristle.proto.common.ApiError;
 import com.bristle.proto.common.ResponseContext;
-import com.bristle.proto.order.GetUnAssignedProductEntriesRequest;
-import com.bristle.proto.order.GetUnAssignedProductEntriesResponse;
+import com.bristle.proto.order.GetProductEntriesRequest;
+import com.bristle.proto.order.GetProductEntriesResponse;
 import com.bristle.proto.order.PatchProductionTicketInfoRequest;
 import com.bristle.proto.order.PatchProductionTicketInfoResponse;
 import com.bristle.proto.order.ProductEntry;
+import com.bristle.proto.order.ProductEntryFilter;
 import com.bristle.proto.order.ProductEntryServiceGrpc;
 import io.grpc.stub.StreamObserver;
 import net.devh.boot.grpc.server.service.GrpcService;
@@ -32,17 +33,21 @@ public class ProductEntryServiceGrpcController extends ProductEntryServiceGrpc.P
     }
 
     @Override
-    public void getUnAssignedProductEntries(GetUnAssignedProductEntriesRequest request, StreamObserver<GetUnAssignedProductEntriesResponse> responseObserver) {
+    public void getProductEntries(GetProductEntriesRequest request, StreamObserver<GetProductEntriesResponse> responseObserver) {
         String requestId = request.getRequestContext().getRequestId();
         log.info("Request id: " + requestId + " , getUnAssignedProductEntries grpc request received.");
         ResponseContext.Builder responseContextBuilder = ResponseContext.newBuilder();
         responseContextBuilder.setRequestId(requestId);
 
         try {
+            if (!request.hasFilter()) {
+                throw new Exception("Required filter missing when getProductEntries");
+            }
+            ProductEntryFilter filter = request.getFilter();
             List<ProductEntry> unAssignedProductEntries
-                    = m_productEntryService.getUnAssignedProductEntries();
+                    = m_productEntryService.getProductEntries(filter.getFilterField(), filter.getProductEntryId());
             responseObserver.onNext(
-                    GetUnAssignedProductEntriesResponse.newBuilder()
+                    GetProductEntriesResponse.newBuilder()
                             .addAllProductEntry(unAssignedProductEntries)
                             .setResponseContext(responseContextBuilder).build());
 
@@ -54,7 +59,7 @@ public class ProductEntryServiceGrpcController extends ProductEntryServiceGrpc.P
                     .setExceptionName(e.getClass().getName()));
 
             responseObserver.onNext(
-                    GetUnAssignedProductEntriesResponse.newBuilder()
+                    GetProductEntriesResponse.newBuilder()
                             .setResponseContext(responseContextBuilder).build());
         }
         responseObserver.onCompleted();
