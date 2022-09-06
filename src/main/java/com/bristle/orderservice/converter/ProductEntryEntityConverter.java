@@ -52,6 +52,7 @@ public class ProductEntryEntityConverter {
                 .setPrice(productEntryEntity.getPrice() == null ? Integer.MIN_VALUE : productEntryEntity.getPrice())
                 .setProductTicketId(productEntryEntity.getProductTicketId() == null ? "" : productEntryEntity.getProductTicketId())
                 .setOrderId(productEntryEntity.getOrder().getOrderId())
+                .setCustomerId(productEntryEntity.getOrder().getCustomerId())
                 .build();
     }
 }

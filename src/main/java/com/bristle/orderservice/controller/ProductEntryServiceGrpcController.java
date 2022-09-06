@@ -83,9 +83,7 @@ public class ProductEntryServiceGrpcController extends ProductEntryServiceGrpc.P
                                 request.getProductEntryId(),
                                 null);
             } else {
-                if (!m_uuidUtils.isValidUuid(request.getProductionTicketId())) {
-                    throw new Exception("product ticket id must be a valid uuid if not resetting to null");
-                }
+
                 updatedProductEntry =
                         m_productEntryService.patchProductionTicketInfoOfProductEntry(
                                 request.getProductEntryId(),

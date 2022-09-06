@@ -49,5 +49,5 @@ public interface ProductEntryRepository extends JpaRepository<ProductEntryEntity
             ProductEntryEntity.COLM_PRODUCT_TICKET_ID + " = ?2 WHERE " +
             ProductEntryEntity.COLM_PRODUCT_ENTRY_ID + " = ?1")
     @Modifying
-    void updateProductTicketIdByProductEntryId(String productEntryId, String productTicketId);
+    void updateProductTicketIdByProductEntryId(String productEntryId, Integer productTicketId);
 }

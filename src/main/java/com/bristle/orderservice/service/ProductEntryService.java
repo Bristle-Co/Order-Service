@@ -55,7 +55,7 @@ public class ProductEntryService {
     }
 
     @Transactional
-    public ProductEntry patchProductionTicketInfoOfProductEntry(String productEntryId, String productTicketId) throws Exception {
+    public ProductEntry patchProductionTicketInfoOfProductEntry(String productEntryId, Integer productTicketId) throws Exception {
         // productTicketId can be null
         m_productEntryRepository.updateProductTicketIdByProductEntryId(productEntryId, productTicketId);
         Optional<ProductEntryEntity> updatedProductEntry = m_productEntryRepository.findById(productEntryId);
