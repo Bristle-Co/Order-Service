@@ -49,7 +49,7 @@ public class ProductEntryEntity {
     // If this field is null that means this product entry
     // has not been made into a product ticket
     @Column(name = COLM_PRODUCT_TICKET_ID, nullable = true)
-    private String productTicketId;
+    private Integer productTicketId;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = COLM_ORDER_ID_FK, referencedColumnName = OrderEntity.COLM_ORDER_ID)
@@ -59,7 +59,7 @@ public class ProductEntryEntity {
     public ProductEntryEntity() {
     }
 
-    public ProductEntryEntity(String productEntryId, String model, Integer quantity, Integer price, String productTicketId, OrderEntity order) {
+    public ProductEntryEntity(String productEntryId, String model, Integer quantity, Integer price, Integer productTicketId, OrderEntity order) {
         this.productEntryId = productEntryId;
         this.model = model;
         this.quantity = quantity;
@@ -99,11 +99,11 @@ public class ProductEntryEntity {
         this.price = price;
     }
 
-    public String getProductTicketId() {
+    public Integer getProductTicketId() {
         return productTicketId;
     }
 
-    public void setProductTicketId(String productTicket_id) {
+    public void setProductTicketId(Integer productTicket_id) {
         this.productTicketId = productTicket_id;
     }
 

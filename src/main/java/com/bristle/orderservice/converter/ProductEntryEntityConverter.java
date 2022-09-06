@@ -22,7 +22,7 @@ public class ProductEntryEntityConverter {
                 // thus we define -2,147,483,648 ( 0x80000000 ) to be null
                 productEntryProto.getQuantity() == Integer.MIN_VALUE ? null : productEntryProto.getQuantity(),
                 productEntryProto.getPrice() == Integer.MIN_VALUE ? null : productEntryProto.getPrice(),
-                productEntryProto.getProductTicketId().equals("") ? null : productEntryProto.getProductTicketId(),
+                productEntryProto.getProductTicketId() == Integer.MIN_VALUE ? null : productEntryProto.getProductTicketId(),
                 orderEntity
         );
     }
@@ -35,7 +35,7 @@ public class ProductEntryEntityConverter {
                 .setModel(productEntryEntity.getModel() == null ? "" : productEntryEntity.getModel())
                 .setQuantity(productEntryEntity.getQuantity() == null ? Integer.MIN_VALUE : productEntryEntity.getQuantity())
                 .setPrice(productEntryEntity.getPrice() == null ? Integer.MIN_VALUE : productEntryEntity.getPrice())
-                .setProductTicketId(productEntryEntity.getProductTicketId() == null ? "" : productEntryEntity.getProductTicketId())
+                .setProductTicketId(productEntryEntity.getProductTicketId() == null ? Integer.MIN_VALUE : productEntryEntity.getProductTicketId())
                 // orderId is always non null when get data from and converting into proto
                 .setOrderId(orderEntity.getOrderId())
                 .build();
@@ -50,7 +50,7 @@ public class ProductEntryEntityConverter {
                 .setModel(productEntryEntity.getModel() == null ? "" : productEntryEntity.getModel())
                 .setQuantity(productEntryEntity.getQuantity() == null ? Integer.MIN_VALUE : productEntryEntity.getQuantity())
                 .setPrice(productEntryEntity.getPrice() == null ? Integer.MIN_VALUE : productEntryEntity.getPrice())
-                .setProductTicketId(productEntryEntity.getProductTicketId() == null ? "" : productEntryEntity.getProductTicketId())
+                .setProductTicketId(productEntryEntity.getProductTicketId() == null ? Integer.MIN_VALUE : productEntryEntity.getProductTicketId())
                 .setOrderId(productEntryEntity.getOrder().getOrderId())
                 .setCustomerId(productEntryEntity.getOrder().getCustomerId())
                 .build();

@@ -30,7 +30,7 @@ public interface ProductEntryRepository extends JpaRepository<ProductEntryEntity
             nativeQuery = true)
     @Modifying
     void replaceProductEntryEntitiesById(String productEntryId,
-                                         String productionTicketId,
+                                         Integer productionTicketId,
                                          Integer orderIdFk,
                                          Integer price,
                                          String model,
