@@ -5,6 +5,7 @@ INSERT INTO `orders` (`order_id`,`customer_id`,`customer_order_id`,`delivered_at
 INSERT INTO `orders` (`order_id`,`customer_id`,`customer_order_id`,`delivered_at`,`due_date`,`issued_at`,`note`) VALUES (5,'達創U-017','PO 5',NULL,'2022-05-05','2022-05-05 23:32:38.000000','note5');
 INSERT INTO `orders` (`order_id`,`customer_id`,`customer_order_id`,`delivered_at`,`due_date`,`issued_at`,`note`) VALUES (6,'盛源U-028','PO 6',NULL,'2022-06-06','2022-06-06 23:32:39.000000','note6');
 INSERT INTO `orders` (`order_id`,`customer_id`,`customer_order_id`,`delivered_at`,`due_date`,`issued_at`,`note`) VALUES (7,'鴻盈U-009','PO 7',NULL,'2022-07-07','2022-07-07 23:32:40.000000','note7');
+INSERT INTO `orders` (`order_id`,`customer_id`,`customer_order_id`,`delivered_at`,`due_date`,`issued_at`,`note`) VALUES (8,'呈新U-023','PO 8',NULL,'2022-08-08','2022-08-08 23:32:40.000000','note8');
 
 INSERT INTO `product_entries` (`product_entry_id`,`model`,`price`,`product_ticket_id`,`quantity`,`order_id_fk`) VALUES ('24fabd51-2eb8-40f7-9a4f-6e14201433f5','model 11',1000,1,1,1);
 INSERT INTO `product_entries` (`product_entry_id`,`model`,`price`,`product_ticket_id`,`quantity`,`order_id_fk`) VALUES ('2b7ae587-6089-4fe4-8242-879afb508e8d','model 12',1000,2,1,1);
@@ -20,3 +21,5 @@ INSERT INTO `product_entries` (`product_entry_id`,`model`,`price`,`product_ticke
 INSERT INTO `product_entries` (`product_entry_id`,`model`,`price`,`product_ticket_id`,`quantity`,`order_id_fk`) VALUES ('cdf50e10-05b6-4bee-820f-99a665f8a661','model 12',6000,12,6,6);
 INSERT INTO `product_entries` (`product_entry_id`,`model`,`price`,`product_ticket_id`,`quantity`,`order_id_fk`) VALUES ('ee4b8e06-7bf9-4c71-a233-ee8afb27f6ee','model 13',7000,13,7,7);
 INSERT INTO `product_entries` (`product_entry_id`,`model`,`price`,`product_ticket_id`,`quantity`,`order_id_fk`) VALUES ('ad00d30b-b2db-47c2-bed4-f1777a877095','model 14',7000,14,7,7);
+-- this one is a product_entry attached to order number 8, but not attached to any production ticket
+INSERT INTO `product_entries` (`product_entry_id`,`model`,`price`,`product_ticket_id`,`quantity`,`order_id_fk`) VALUES ('d8f812db-d1a9-4b55-87c1-2123c463a007','model 15',8000,null,8,8);
